@@ -7,7 +7,9 @@ import java.sql.*;
 import java.util.Map;
 import misclases.*;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import java.util.Date;
 
 /**
  *
@@ -67,11 +69,106 @@ public class DataBase {
                   res_e.getInt("empleadoId"), 
                   res_e.getString("puesto"));
         }
+     
         return me;
         
         } catch(SQLException err) {
             System.out.println(err);
             return null;
+        }
+    }
+    
+    public void createBills(double amount, Descuento d, Cliente c, ArrayList<Mascota> listaMascota,  ArrayList<Servicio[]> listaServicios, Empleado em){
+         String sql;
+          try {
+            if (d == null){
+                  sql = "INSERT INTO consulta (total, fecha, empleadoId) VALUES (?, ?, ?)";
+            } else {
+                 sql = "INSERT INTO consulta (total, descuentoId, fecha, empleadoId) VALUES (?, ?, ?, ?)";
+            }
+           
+            PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            if (d == null){
+                ps.setDouble(1, amount); 
+                ps.setDate(2, new java.sql.Date(new Date().getTime()));
+                ps.setInt(3, em.getEmployeeId());
+            } else {
+                ps.setDouble(1, amount); 
+                ps.setInt(2, d.getDiscountId()); 
+                ps.setDate(3, new java.sql.Date(new Date().getTime()));
+                ps.setInt(4, em.getEmployeeId());
+            }
+            int rowsInserted = ps.executeUpdate();
+            if (rowsInserted > 0) {
+             ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    generateBill(id, d, c, listaMascota, listaServicios);
+         
+           
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Hubo un error: "+e);
+        }
+    }
+    
+    public void generateBill(int id, Descuento d, Cliente c, ArrayList<Mascota> listaMascota,  ArrayList<Servicio[]> listaServicios){
+            int index = 0;
+             String sql = "insert into factura (clienteId, mascotaId, servicioId, descuentoId, total, fecha) values (?, ?, ?, ?, ?, ?)";
+            try { 
+            PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            for (Servicio[] arrayS : listaServicios){
+                    
+                    for (Servicio s : arrayS){
+                        //Guardo uno por uno 
+                        ps.setInt(1, c.getClienteId());
+                        ps.setInt(2, listaMascota.get(index).getPetId());
+                        ps.setInt(3, s.getServiceId());
+//                        ps.setInt(4, d == null ? 0 : d.getDiscountId());
+                        if (d != null) ps.setInt(4, d.getDiscountId());
+                        else ps.setString(4, null);
+                        ps.setFloat(5, s.getPrecio());
+                        ps.setDate(6, new java.sql.Date(new Date().getTime()));
+                         int rowsInserted = ps.executeUpdate();
+                         if (rowsInserted > 0) {
+                             ResultSet rs = ps.getGeneratedKeys();
+                            if (rs.next()) {
+                            int facturaId = rs.getInt(1);
+                            generateDoc(facturaId, id);
+         
+           
+                            }
+                         }
+                               
+                        
+                       }
+                    index++;
+                     
+                   }
+              JOptionPane.showMessageDialog(null, "Se generaró correctamente la factura.");
+            }catch (SQLException e){
+            System.out.println("Hubo un error en generateBill: " +e);    
+            }
+            
+        
+    }
+    
+    public void generateDoc(int consultaId, int facturaId){
+        String sql = "INSERT INTO  factura_consulta(facturaId, consultaId) VALUES (?, ?)";
+          try {
+           
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            
+                ps.setDouble(1, consultaId); 
+                ps.setInt(2, facturaId); 
+            
+            int rowsInserted = ps.executeUpdate();
+            if (rowsInserted > 0) {
+            
+            }
+        } catch (SQLException e) {
+            System.out.println("Hubo un error: "+e);
         }
     }
     

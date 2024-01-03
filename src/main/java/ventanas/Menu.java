@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import misclases.*;
+import system.DataBase;
 
 /**
  *
@@ -25,21 +26,34 @@ public class Menu extends javax.swing.JFrame {
     final private ArrayList<Servicio[]> listaServicios = new ArrayList<>();
     final private ArrayList<Mascota> listaMascota = new ArrayList<>();
     private Empleado me = null;
+    Descuento descuentouwu = null;
+    final private ArrayList<Cliente> ayuda = new ArrayList<>();
     private DefaultTableModel modelo;
-    private Connection conexion = null;
+    Cliente objetoBuscado = null;
+    private boolean Continue;
+    
+//    Connection conexion = null;
+     DataBase db = new DataBase();
+     Connection conexion = db.getConnected();
     /**
      * Creates new form Menu
      * @param user
      * @param db
      */
-    public Menu(Empleado user, Connection db) {
-        me = user;
-        conexion = db;
+    //Empleado user, Connection db
+    public Menu() {
+//        me = user;
+//        conexion = db;
+        Continue = false;
+        me = new Empleado("erthdataservice@hotmail.com","333356987","Arboledas #486", "Zapopan.", 45180, "admin","","","admin","erth.data", 32, "owner");
         initComponents();
         setLocationRelativeTo(null);
         fillBox();
         setDatos();
 
+    }
+    public void setContinue(boolean flag){
+        this.Continue = flag;
     }
     
     public void addServices(Servicio[] services){
@@ -59,11 +73,14 @@ public class Menu extends javax.swing.JFrame {
     }
     
     public void updateTable(){
-            Object[] info = new Object[5];
+            Object[] info = new Object[4];
             modelo = (DefaultTableModel) Tabla.getModel();
             double suma = 0;
+            for (Mascota owo : listaMascota){
+               info [0] = owo.getPetId();
+           } 
            for (Mascota owo : listaMascota){
-               info [0] = owo.getNombre();
+               info [1] = owo.getNombre();
            }
            
             
@@ -76,7 +93,7 @@ public class Menu extends javax.swing.JFrame {
                             }
                          nombresServicios.append(s.getTipo());
                         }
-                     info[1] = nombresServicios.toString();
+                     info[2] = nombresServicios.toString();
                    }
                 
                 
@@ -86,23 +103,37 @@ public class Menu extends javax.swing.JFrame {
                         total += s.getPrecio();
                         }
                      suma+=total;
-                     info[2] = "$ " + total;
+                     info[3] = "$ " + total;
                    }
                    
-               
-                 modelo.addRow(info);
-            txtTotal.setText("$"+ suma);
+            double[] valores = calcularDescuento(suma);   
+            modelo.addRow(info);
+            txtTotal.setText("$"+ valores[0] + "");
+            txtDescuento.setText(listaMascota.size() > 1 ?  String.valueOf(valores[1]).replace(".0", "") + "%"  : "Ninguno");
             Tabla.setModel(modelo);
     }
     
     private void fillBox(){
          ClientsBox.addItem("Ninguno");
-        String sql = "select nombre, apellidoP, apellidoM from cliente";
+        String sql = "select * from cliente";
         try {
             Statement st = conexion.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                ClientsBox.addItem(rs.getString("nombre") + " " + rs.getString("apellidoP")+ " " + rs.getString("apellidoM"));
+                String n = rs.getString("nombre");
+                String p = rs.getString("apellidoP");
+                String m = rs.getString("apellidoM");
+                ayuda.add(new Cliente(rs.getString("email"),
+                rs.getString("tel_cel"),
+                rs.getString("direccion"), 
+                rs.getString("colonia"), 
+                Integer.parseInt(rs.getString("zp")), 
+                rs.getString("nombre"), 
+                rs.getString("apellidoP"), 
+                rs.getString("apellidoM"), 
+                rs.getInt("clienteId"), 
+                rs.getString("tel_casa")));
+                ClientsBox.addItem(n + " " +p + " " + m);
             }
         }catch (SQLException e){
             System.out.println("Hubo un error para consultar los datos: " + e);
@@ -120,8 +151,6 @@ public class Menu extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         btnExit = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -141,6 +170,14 @@ public class Menu extends javax.swing.JFrame {
         txtFecha = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         txtEmpleado = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        btnEmployee = new javax.swing.JButton();
+        btnPets = new javax.swing.JButton();
+        btnClient = new javax.swing.JButton();
+        btnDiscounts = new javax.swing.JButton();
+        btnServices = new javax.swing.JButton();
+        btnLogs = new javax.swing.JButton();
+        btnMain = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -173,33 +210,8 @@ public class Menu extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 860, -1));
 
-        jPanel5.setBackground(new java.awt.Color(102, 102, 255));
-
-        jButton2.setText("Empleados");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(95, 95, 95)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(666, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 110, 810));
-
         jLabel1.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
-        jLabel1.setText("Registro de consulta");
+        jLabel1.setText("Generacion de facturas");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, -1, 37));
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Acerca de la consulta"));
@@ -209,11 +221,11 @@ public class Menu extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre Paciente", "Servicio(s)", "Total"
+                "MascotaId", "Nombre Mascota", "Servicio(s)", "Total"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                true, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -303,7 +315,7 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel4.setText("Descuento aplicado:");
 
-        txtDescuento.setText("No");
+        txtDescuento.setText("Ninguno");
 
         jLabel6.setText("Fecha:");
 
@@ -350,13 +362,103 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(jLabel7)
                     .addComponent(txtEmpleado))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(generateInvoice)
-                    .addComponent(jLabel6)
-                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtFecha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(generateInvoice)
+                        .addComponent(jLabel6))))
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 550, 720, 140));
+
+        jPanel5.setBackground(new java.awt.Color(102, 102, 255));
+
+        btnEmployee.setText("Empleados");
+        btnEmployee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEmployeeActionPerformed(evt);
+            }
+        });
+
+        btnPets.setText("Mascotas");
+        btnPets.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPetsActionPerformed(evt);
+            }
+        });
+
+        btnClient.setText("Clientes");
+        btnClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClientActionPerformed(evt);
+            }
+        });
+
+        btnDiscounts.setText("Descuentos");
+        btnDiscounts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDiscountsActionPerformed(evt);
+            }
+        });
+
+        btnServices.setText("Servicios");
+        btnServices.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnServicesActionPerformed(evt);
+            }
+        });
+
+        btnLogs.setText("Registros");
+        btnLogs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogsActionPerformed(evt);
+            }
+        });
+
+        btnMain.setText("Menu Prinpal");
+        btnMain.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMainActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEmployee, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPets, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDiscounts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnServices, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLogs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnClient, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addComponent(btnMain, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(btnClient, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(btnPets, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(btnDiscounts, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(btnServices, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(btnLogs, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(251, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 110, 810));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -379,14 +481,6 @@ public class Menu extends javax.swing.JFrame {
         yMouse = evt.getY();
     }//GEN-LAST:event_jPanel1MousePressed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        ServicesManagement em = new ServicesManagement();
-        em.setVisible(true);
-        em.pack();
-        this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void TablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaMouseClicked
         // TODO add your handling code here:
         
@@ -400,14 +494,32 @@ public class Menu extends javax.swing.JFrame {
 
     private void addpatientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addpatientActionPerformed
         // TODO add your handling code here:
-        AddPatient Lwindow = new  AddPatient(this);
-        Lwindow.setVisible(true);
+        if (ClientsBox.getSelectedItem().toString().equals("Ninguno")){
+            JOptionPane.showMessageDialog(this, "Debes seleccionar un clientes antes de agregar un paciente.");
+        } else {
+              ClientsBox.setEnabled(false);
+              for (Cliente obj : ayuda) {
+              String fullName = obj.getName() + " " + obj.getLastNameP()+ " " + obj.getLastNameM();    
+        
+              if (fullName.equals(ClientsBox.getSelectedItem().toString().toUpperCase())) {
+                objetoBuscado = obj;
+                break;
+                }
+              }
+              int OwnerId = objetoBuscado.getClienteId();
+              AddPatient Lwindow = new  AddPatient(this, OwnerId);
+              Lwindow.setVisible(true);
+        }
+   
         
     }//GEN-LAST:event_addpatientActionPerformed
 
     private void clicHereMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clicHereMouseClicked
         // TODO add your handling code here:
-        System.out.println("Si");
+        ClientManagement cm = new ClientManagement();
+        cm.setVisible(true);
+        cm.pack();
+        this.dispose();
     }//GEN-LAST:event_clicHereMouseClicked
 
     private void clicHereMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clicHereMouseEntered
@@ -427,9 +539,83 @@ public class Menu extends javax.swing.JFrame {
 
     private void generateInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateInvoiceActionPerformed
         // TODO add your handling code here:
-        System.out.println("Tamaño de servicios: "+ listaServicios.size());
-        System.out.println("Tamaño de : " + listaMascota.size());
+        //createBills(double amount, Descuento d, Cliente c, ArrayList<Mascota> listaMascota,  ArrayList<Servicio[]> listaServicios)
+       if (!this.Continue){
+           JOptionPane.showMessageDialog(this, "Necesitas agregar pacientes con el servicio \nque necesitan para generar una factura");
+       } else {
+        if (txtDescuento.getText().equals("15%")){
+            descuentouwu = new Descuento();
+            descuentouwu.setDiscountId(1);
+        } else if (txtDescuento.getText().equals("25%")) {
+            descuentouwu = new Descuento();
+            descuentouwu.setDiscountId(2);
+        } else descuentouwu = null;
+        setContinue(false);
+        db.createBills(Float.parseFloat(txtTotal.getText().replace("$", "")), descuentouwu, objetoBuscado, listaMascota, listaServicios, me );
+        listaMascota.clear();
+        listaServicios.clear();
+        clearTable();
+        ClientsBox.setEnabled(true);
+        
+       }
+        
     }//GEN-LAST:event_generateInvoiceActionPerformed
+
+    private void btnEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmployeeActionPerformed
+        // TODO add your handling code here:
+        EmployeeManagement em = new EmployeeManagement();
+        em.setVisible(true);
+        em.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnEmployeeActionPerformed
+
+    private void btnPetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPetsActionPerformed
+        // TODO add your handling code here:
+        PatientManagement pm = new PatientManagement();
+        pm.setVisible(true);
+        pm.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnPetsActionPerformed
+
+    private void btnClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientActionPerformed
+        // TODO add your handling code here:
+        ClientManagement cm = new ClientManagement();
+        cm.setVisible(true);
+        cm.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnClientActionPerformed
+
+    private void btnDiscountsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscountsActionPerformed
+        // TODO add your handling code here:
+        DiscountManagement dm = new DiscountManagement();
+        dm.setVisible(true);
+        dm.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnDiscountsActionPerformed
+
+    private void btnServicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServicesActionPerformed
+        // TODO add your handling code here:
+        ServicesManagement sm = new ServicesManagement();
+        sm.setVisible(true);
+        sm.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnServicesActionPerformed
+
+    private void btnLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogsActionPerformed
+        // TODO add your handling code here:
+        QueryBills qb = new QueryBills();
+        qb.setVisible(true);
+        qb.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnLogsActionPerformed
+
+    private void btnMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainActionPerformed
+        // TODO add your handling code here:
+        Menu mm = new Menu();
+        mm.setVisible(true);
+        mm.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnMainActionPerformed
 
     private void setDatos(){
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy hh:mm");
@@ -438,49 +624,82 @@ public class Menu extends javax.swing.JFrame {
         txtFecha.setText(fechaComoCadena);
         txtEmpleado.setText(me.getName() + " " + me.getLastNameP() + " " + me.getLastNameM());
     }
+    
+    private void clearTable(){
+        while (Tabla.getRowCount() > 0){
+        modelo.removeRow(0);
+        }
+    }
+    
+    public double[] calcularDescuento(double total) {
+    int numMascotas = listaMascota.size();
+    double descuento = 0;
+    int porcentajeDescuento = 0;
+
+    if (numMascotas == 2) {
+        porcentajeDescuento = 15;  // 15% de descuento
+        descuento = total * (porcentajeDescuento / 100.0);
+    } else if (numMascotas >= 3) {
+        porcentajeDescuento = 25;  // 25% de descuento
+        descuento = total * (porcentajeDescuento / 100.0);
+    }
+
+    double[] resultado = {total - descuento, porcentajeDescuento};
+    return resultado;
+    }
     /**
      * @param args the command line arguments
      */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new Menu().setVisible(true);
-//            }
-//        });
-//    }
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Menu().setVisible(true);
+            }
+        });
+        
+      
+    }
+    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> ClientsBox;
     private javax.swing.JTable Tabla;
     private javax.swing.JToggleButton addpatient;
+    private javax.swing.JButton btnClient;
+    private javax.swing.JButton btnDiscounts;
+    private javax.swing.JButton btnEmployee;
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnLogs;
+    private javax.swing.JButton btnMain;
+    private javax.swing.JButton btnPets;
+    private javax.swing.JButton btnServices;
     private javax.swing.JLabel clicHere;
     private javax.swing.JToggleButton generateInvoice;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

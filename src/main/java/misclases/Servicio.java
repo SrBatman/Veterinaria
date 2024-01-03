@@ -15,7 +15,9 @@ public class Servicio {
     
     
     public Servicio(){
-        
+        tipo = "";
+        precio = 0.0f;
+        ServiceId = 0;
     }
 
     public String getTipo() {

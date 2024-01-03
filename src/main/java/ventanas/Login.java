@@ -219,8 +219,8 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Debes llenar el campo de la contraseña.");
         } else if (inputUser.equals(admin_user) && inputPass.equals(admin_pass)){
             JOptionPane.showMessageDialog(this, "Iniciaste sesion correctamente :D");
-            Empleado employee = new Empleado("erthdataservice@hotmail.com","333356987","Arboledas #486", "Zapopan.", 45180, "admin","","","admin","erth.data", 0, "owner");
-            Menu principal = new Menu(employee, conexion);
+//            Empleado employee = new Empleado("erthdataservice@hotmail.com","333356987","Arboledas #486", "Zapopan.", 45180, "admin","","","admin","erth.data", 0, "owner");
+            Menu principal = new Menu();
                 this.setVisible(false);
                 this.dispose();
                 principal.setVisible(true);
@@ -232,7 +232,7 @@ public class Login extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Las credenciales no son validas :(");
             } else {
                 JOptionPane.showMessageDialog(this, "Iniciaste sesion correctamente :D");
-                Menu principal = new Menu(employee, conexion);
+               Menu principal = new Menu();
                 this.setVisible(false);
                 this.dispose();
                 principal.setVisible(true);
@@ -274,22 +274,7 @@ public class Login extends javax.swing.JFrame {
 //        
 //     
 //    }
-    
-    class RoundBorder extends AbstractBorder {
-        
-        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-            g.drawRoundRect(x, y, width-1, height-1, 15, 15);
-        }
-        
-        public Insets getBorderInsets(Component c) {
-            return new Insets(10, 10, 10, 10);
-        }
-        
-        public Insets getBorderInsets(Component c, Insets insets) {
-            insets.left = insets.top = insets.right = insets.bottom = 10;
-            return insets;
-        }
-    }
+//    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel circulo;

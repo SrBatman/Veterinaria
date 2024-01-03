@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import system.DataBase;
 import java.awt.event.*;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import javax.swing.JOptionPane;
@@ -24,16 +25,16 @@ public class AddPatient extends javax.swing.JFrame {
    private final ArrayList<String> lista = new ArrayList<>(); 
    final private LinkedHashMap<String, Servicio> servicesList = new LinkedHashMap<>();
    final private LinkedHashMap<String, Mascota> petsList = new LinkedHashMap<>();
-   
+   final private int ownerId;
    static Menu principal = null;
     /**
      * Creates new form AddPatient
      * @param ventana
      */
-    public AddPatient(Menu ventana) {
+    public AddPatient(Menu ventana, int id) {
         initComponents();
         setLocationRelativeTo(null);
-      
+        ownerId = id;
         principal = ventana;
         fillBoxes();
     }
@@ -181,7 +182,7 @@ public class AddPatient extends javax.swing.JFrame {
                 allServices[i] = servicesList.get(lista.get(i));
              
                 }
-            
+            principal.setContinue(true);
             principal.addServices(allServices);
             principal.updateTable();
             principal.setVisible(true);
@@ -224,10 +225,11 @@ public class AddPatient extends javax.swing.JFrame {
         servicesBox.addItem("Ninguno");
         
         
-        String sql = "select * from mascota";
+        String sql = "SELECT m.* FROM mascota m INNER JOIN pet_and_owner p ON m.mascotaId = p.pet WHERE p.owner = ?";
         try {
-            Statement st = conexion.createStatement();
-            ResultSet rs = st.executeQuery(sql);
+            PreparedStatement st = conexion.prepareStatement(sql);
+            st.setInt(1, ownerId);
+            ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 
                 Mascota m = new Mascota();
@@ -268,37 +270,37 @@ public class AddPatient extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AddPatient(principal).setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(AddPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(AddPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(AddPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(AddPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new AddPatient(principal).setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelled;

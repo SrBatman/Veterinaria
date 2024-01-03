@@ -77,11 +77,15 @@ public class ClientManagement extends javax.swing.JFrame {
         Tabla = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        goServices = new javax.swing.JButton();
-        goEmployees = new javax.swing.JButton();
-        goClients = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        btnEmployee = new javax.swing.JButton();
+        btnPets = new javax.swing.JButton();
+        btnClient = new javax.swing.JButton();
+        btnDiscounts = new javax.swing.JButton();
+        btnServices = new javax.swing.JButton();
+        btnLogs = new javax.swing.JButton();
+        btnMain = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -366,26 +370,58 @@ public class ClientManagement extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 870, 30));
 
+        jLabel1.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
+        jLabel1.setText("Administracion de clientes");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, -1, 37));
+
         jPanel5.setBackground(new java.awt.Color(102, 102, 255));
 
-        goServices.setText("Servicios");
-        goServices.addActionListener(new java.awt.event.ActionListener() {
+        btnEmployee.setText("Empleados");
+        btnEmployee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                goServicesActionPerformed(evt);
+                btnEmployeeActionPerformed(evt);
             }
         });
 
-        goEmployees.setText("Empleados");
-        goEmployees.addActionListener(new java.awt.event.ActionListener() {
+        btnPets.setText("Mascotas");
+        btnPets.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                goEmployeesActionPerformed(evt);
+                btnPetsActionPerformed(evt);
             }
         });
 
-        goClients.setText("Clientes");
-        goClients.addActionListener(new java.awt.event.ActionListener() {
+        btnClient.setText("Clientes");
+        btnClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                goClientsActionPerformed(evt);
+                btnClientActionPerformed(evt);
+            }
+        });
+
+        btnDiscounts.setText("Descuentos");
+        btnDiscounts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDiscountsActionPerformed(evt);
+            }
+        });
+
+        btnServices.setText("Servicios");
+        btnServices.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnServicesActionPerformed(evt);
+            }
+        });
+
+        btnLogs.setText("Registros");
+        btnLogs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogsActionPerformed(evt);
+            }
+        });
+
+        btnMain.setText("Menu Prinpal");
+        btnMain.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMainActionPerformed(evt);
             }
         });
 
@@ -394,35 +430,38 @@ public class ClientManagement extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(goClients, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                    .addComponent(goServices, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnEmployee, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPets, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDiscounts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnServices, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLogs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnClient, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addComponent(goEmployees, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 6, Short.MAX_VALUE)))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(169, 169, 169)
-                .addComponent(goClients, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(goServices, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(488, Short.MAX_VALUE))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(105, 105, 105)
-                    .addComponent(goEmployees, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(617, Short.MAX_VALUE)))
+                .addGap(60, 60, 60)
+                .addComponent(btnMain, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(btnClient, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(btnPets, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(btnDiscounts, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(btnServices, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(btnLogs, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(251, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 120, 780));
-
-        jLabel1.setFont(new java.awt.Font("DialogInput", 1, 18)); // NOI18N
-        jLabel1.setText("Administracion de clientes");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, -1, 37));
+        getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 110, 810));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -575,25 +614,61 @@ public class ClientManagement extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void goServicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goServicesActionPerformed
-        // TODO add your handling code here:
-        ServicesManagement sm = new ServicesManagement();
-        sm.setVisible(true);
-        sm.pack();
-        this.dispose();
-    }//GEN-LAST:event_goServicesActionPerformed
-
-    private void goEmployeesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goEmployeesActionPerformed
+    private void btnEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmployeeActionPerformed
         // TODO add your handling code here:
         EmployeeManagement em = new EmployeeManagement();
         em.setVisible(true);
         em.pack();
         this.dispose();
-    }//GEN-LAST:event_goEmployeesActionPerformed
+    }//GEN-LAST:event_btnEmployeeActionPerformed
 
-    private void goClientsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goClientsActionPerformed
+    private void btnPetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPetsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_goClientsActionPerformed
+        PatientManagement pm = new PatientManagement();
+        pm.setVisible(true);
+        pm.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnPetsActionPerformed
+
+    private void btnClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientActionPerformed
+        // TODO add your handling code here:
+        ClientManagement cm = new ClientManagement();
+        cm.setVisible(true);
+        cm.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnClientActionPerformed
+
+    private void btnDiscountsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscountsActionPerformed
+        // TODO add your handling code here:
+        DiscountManagement dm = new DiscountManagement();
+        dm.setVisible(true);
+        dm.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnDiscountsActionPerformed
+
+    private void btnServicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServicesActionPerformed
+        // TODO add your handling code here:
+        ServicesManagement sm = new ServicesManagement();
+        sm.setVisible(true);
+        sm.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnServicesActionPerformed
+
+    private void btnLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogsActionPerformed
+        // TODO add your handling code here:
+        QueryBills qb = new QueryBills();
+        qb.setVisible(true);
+        qb.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnLogsActionPerformed
+
+    private void btnMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainActionPerformed
+        // TODO add your handling code here:
+        Menu mm = new Menu();
+        mm.setVisible(true);
+        mm.pack();
+        this.dispose();
+    }//GEN-LAST:event_btnMainActionPerformed
 
     private void addData(){
         Map<String, String> lista = new LinkedHashMap<>();
@@ -858,11 +933,15 @@ public class ClientManagement extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla;
     private javax.swing.JButton addData;
+    private javax.swing.JButton btnClient;
+    private javax.swing.JButton btnDiscounts;
+    private javax.swing.JButton btnEmployee;
+    private javax.swing.JButton btnLogs;
+    private javax.swing.JButton btnMain;
+    private javax.swing.JButton btnPets;
+    private javax.swing.JButton btnServices;
     private javax.swing.JButton deletData;
     private javax.swing.JButton editData;
-    private javax.swing.JButton goClients;
-    private javax.swing.JButton goEmployees;
-    private javax.swing.JButton goServices;
     private javax.swing.JTextField inputAddress;
     private javax.swing.JTextField inputCol;
     private javax.swing.JTextField inputEmail;
